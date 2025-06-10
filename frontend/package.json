@@ -1,0 +1,31 @@
+{
+  "name": "delivery-classifier-web",
+  "version": "1.0.0",
+  "description": "허우적 배송분류 자동화 시스템 - 당일배송, 새벽배송, 택배배송을 자동으로 분류하고 주소 매칭을 통해 배송 효율성을 높이는 전문 솔루션",
+  "keywords": ["배송분류", "자동화", "당일배송", "새벽배송", "택배배송", "주소매칭", "우편번호", "배송관리", "물류시스템"],
+  "author": "허우적",
+  "homepage": "https://delivery.example.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/example/delivery-classifier"
+  },
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "sitemap": "next build && next export"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "next": "^13.5.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.29",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.6",
+    "typescript": "^5.8.3"
+  }
+}

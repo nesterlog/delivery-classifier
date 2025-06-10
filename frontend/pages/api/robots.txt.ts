@@ -1,0 +1,32 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  // 캐시 헤더 설정
+  res.setHeader('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate');
+  res.setHeader('Content-Type', 'text/plain');
+
+  // robots.txt 내용 생성
+  const robotsTxt = `# Robots.txt for 허우적 배송분류 자동화 시스템
+User-agent: *
+Allow: /
+
+# 보안이 필요한 관리자 페이지는 크롤링 금지
+Disallow: /api-key
+Disallow: /admin
+
+# API 엔드포인트는 크롤링 금지
+Disallow: /api/
+
+# 임시 파일 및 캐시 디렉토리
+Disallow: /_next/
+Disallow: /tmp/
+Disallow: /.next/
+
+# 사이트맵 위치
+Sitemap: ${req.headers.host ? `https://${req.headers.host}` : 'https://delivery.example.com'}/sitemap.xml
+
+# 크롤링 지연 (선택사항)
+Crawl-delay: 1`;
+
+  res.status(200).send(robotsTxt);
+} 

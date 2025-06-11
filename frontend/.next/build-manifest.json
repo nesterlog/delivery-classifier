@@ -22,35 +22,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/api-key": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/api-key.js"
-    ],
     "/classify": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/classify.js"
-    ],
-    "/data-management": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/data-management.js"
-    ],
-    "/dawn-option": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/dawn-option.js"
-    ],
-    "/invoice": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/invoice.js"
-    ],
-    "/zipcode": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/zipcode.js"
     ]
   },
   "ampFirstPages": []

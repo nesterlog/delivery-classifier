@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 import os
 import json
 import logging
+import requests
 from pydantic import BaseModel
 
 # 로깅 설정
@@ -72,6 +73,50 @@ async def get_api_keys():
     except Exception as e:
         logger.error(f"API 키 조회 오류: {str(e)}")
         raise HTTPException(status_code=500, detail=f"API 키 조회 실패: {str(e)}")
+
+@router.get("/status")
+async def get_api_key_status():
+    """
+    API 키 설정 상태와 작동 여부를 확인합니다. (로그인 불필요)
+    """
+    try:
+        api_keys = _load_api_keys()
+        kakao_key = api_keys.get("kakao", "")
+        
+        has_key = bool(kakao_key and kakao_key.strip())
+        is_working = False
+        
+        if has_key:
+            # 카카오 API 테스트 호출
+            try:
+                test_url = "https://dapi.kakao.com/v2/local/search/address.json"
+                headers = {"Authorization": f"KakaoAK {kakao_key}"}
+                params = {"query": "서울특별시 강남구 테헤란로 152"}
+                
+                response = requests.get(test_url, headers=headers, params=params, timeout=5)
+                is_working = response.status_code == 200
+                
+                if response.status_code == 200:
+                    logger.info("카카오 API 연결 테스트 성공")
+                else:
+                    logger.warning(f"카카오 API 연결 테스트 실패: {response.status_code}")
+                    
+            except Exception as api_error:
+                logger.error(f"카카오 API 테스트 오류: {str(api_error)}")
+                is_working = False
+        
+        return {
+            "hasKey": has_key,
+            "isWorking": is_working,
+            "message": "API 키 상태 확인 완료"
+        }
+    except Exception as e:
+        logger.error(f"API 키 상태 확인 오류: {str(e)}")
+        return {
+            "hasKey": False,
+            "isWorking": False,
+            "message": f"상태 확인 실패: {str(e)}"
+        }
 
 @router.put("/")
 async def update_api_key_put(update_data: ApiKeyUpdate):

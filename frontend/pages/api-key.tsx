@@ -14,10 +14,14 @@ const ApiKeyPage: React.FC = () => {
   const [maskedKey, setMaskedKey] = useState("");
   const [alert, setAlert] = useState<{type: 'success'|'danger'|'info'|'warning', message: string} | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [publicApiStatus, setPublicApiStatus] = useState<{hasKey: boolean, isWorking: boolean} | null>(null);
 
   useEffect(() => {
     if (isAuthenticated) {
       loadApiKey();
+    } else {
+      // 로그인하지 않은 상태에서도 API 키 상태 확인
+      checkPublicApiStatus();
     }
   }, [isAuthenticated]);
 
@@ -43,6 +47,21 @@ const ApiKeyPage: React.FC = () => {
       setAlert({
         type: 'info',
         message: '로그아웃되었습니다.'
+      });
+    }
+  };
+
+  const checkPublicApiStatus = async () => {
+    try {
+      const response = await axios.get("/api/api-key/status");
+      setPublicApiStatus({
+        hasKey: response.data.hasKey || false,
+        isWorking: response.data.isWorking || false
+      });
+    } catch (error: any) {
+      setPublicApiStatus({
+        hasKey: false,
+        isWorking: false
       });
     }
   };
@@ -172,7 +191,57 @@ const ApiKeyPage: React.FC = () => {
             </form>
           </Card>
           
-          <div className="mt-4 text-center">
+          <div className="mt-4 space-y-4">
+            {/* API 키 상태 표시 */}
+            <Card title="🔑 API 키 상태">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between p-3 bg-light rounded">
+                  <div>
+                    <div className="font-medium">카카오 API 키</div>
+                    <div className="text-sm text-gray">주소 검색 기능</div>
+                  </div>
+                  <div className="text-right">
+                    {publicApiStatus === null ? (
+                      <div className="text-gray">
+                        <span className="animate-pulse">⏳</span> 확인 중...
+                      </div>
+                    ) : publicApiStatus.hasKey ? (
+                      <div>
+                        <div className="text-green-600 font-medium">
+                          ✅ API 키 설정됨
+                        </div>
+                        <div className={`text-sm ${publicApiStatus.isWorking ? 'text-green-600' : 'text-red-600'}`}>
+                          {publicApiStatus.isWorking ? '🟢 정상 작동' : '🔴 연결 오류'}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-red-600 font-medium">
+                        ❌ API 키 미설정
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                {publicApiStatus && !publicApiStatus.hasKey && (
+                  <div className="p-3 bg-yellow-50 border border-yellow-200 rounded">
+                    <div className="text-sm text-yellow-800">
+                      ⚠️ API 키가 설정되지 않았습니다.<br/>
+                      관리자 로그인 후 카카오 API 키를 설정해주세요.
+                    </div>
+                  </div>
+                )}
+                
+                {publicApiStatus && publicApiStatus.hasKey && !publicApiStatus.isWorking && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded">
+                    <div className="text-sm text-red-800">
+                      🚨 API 키는 설정되어 있지만 연결에 문제가 있습니다.<br/>
+                      관리자 로그인 후 API 키를 확인해주세요.
+                    </div>
+                  </div>
+                )}
+              </div>
+            </Card>
+            
             <Card title="📋 접근 안내">
               <p className="text-sm text-gray">
                 API 키 관리는 관리자만 접근할 수 있습니다.<br/>

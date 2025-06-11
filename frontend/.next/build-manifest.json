@@ -32,6 +32,11 @@
       "static/chunks/main.js",
       "static/chunks/pages/classify.js"
     ],
+    "/data-management": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/data-management.js"
+    ],
     "/dawn-option": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",

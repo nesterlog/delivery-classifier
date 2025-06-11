@@ -2,9 +2,10 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/api-key": "pages/api-key.js",
   "/classify": "pages/classify.js",
-  "/dawn-option": "pages/dawn-option.js",
+  "/data-management": "pages/data-management.js",
+  "/api-key": "pages/api-key.js",
+  "/zipcode": "pages/zipcode.js",
   "/invoice": "pages/invoice.js",
-  "/zipcode": "pages/zipcode.js"
+  "/dawn-option": "pages/dawn-option.js"
 }

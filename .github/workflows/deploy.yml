@@ -1,0 +1,56 @@
+name: Deploy to AWS Elastic Beanstalk
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install and build frontend
+      run: |
+        cd frontend
+        npm ci
+        npm run build
+        
+    - name: Copy frontend build to backend
+      run: |
+        mkdir -p backend/static
+        cp -r frontend/.next/static/* backend/static/ || true
+        cp -r frontend/out/* backend/static/ || true
+        
+    - name: Create deployment package
+      run: |
+        zip -r deploy.zip . -x "*.git*" "node_modules/*" "frontend/.next/*" "frontend/out/*" "__pycache__/*"
+        
+    - name: Deploy to Elastic Beanstalk
+      uses: einaregilsson/beanstalk-deploy@v21
+      with:
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: delivery-classifier
+        environment_name: delivery-classifier-env
+        version_label: ${{ github.sha }}
+        region: ap-northeast-2
+        deployment_package: deploy.zip 

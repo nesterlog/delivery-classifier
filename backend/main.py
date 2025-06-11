@@ -103,5 +103,11 @@ async def root():
         "backend_directory": BASE_DIR,
         "user_data_path": user_abs_path,
         "system_data_path": system_abs_path
-    } 
+    }
+
+@app.get("/api/health")
+async def health_check():
+    return {"status": "healthy", "message": "로컬 백엔드 서버 정상 작동"}
+
+ 
  

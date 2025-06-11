@@ -112,4 +112,40 @@ memory-bank/
 
 # Temporary files
 *.tmp
-*.temp 
+*.temp
+
+# ===========================================
+# 배포 제외 파일들 (Development Only)
+# ===========================================
+
+# 로컬 개발 도구
+start_backend.py
+LOCAL_TEST_GUIDE.md
+
+# 프로젝트 문서 (배포 불필요)
+projectbrief.md
+
+# GUI 독립 프로그램 (웹 버전과 별개)
+delivery_classifier.py
+
+# 개발 유틸리티
+fix_zip_codes.py
+
+# 중복 설정 파일
+/next-env.d.ts
+/tsconfig.json
+
+# Windows 전용 바이너리
+backend/_cffi_backend.cp313-win_amd64.pyd
+backend/*.pyd
+
+# Lambda 배포 관련 임시 파일
+lambda_function.py
+update_lambda*.py
+working_lambda.py
+deploy_*.py
+create_*.py
+add_*.py
+check_*.py
+fix_*.py
+test_*.py 
